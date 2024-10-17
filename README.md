@@ -199,7 +199,7 @@ This project is licensed under the MIT License.
 
 If you have any questions or feedback, feel free to reach out:
 
-- GitHub: [@your-username](https://github.com/hari7261)
+- GitHub: [hari7261](https://github.com/hari7261)
 ---
 
 Thank you for checking out the **Storyteller Website**! Happy reading! 📚🎉
