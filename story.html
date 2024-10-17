@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryTeller - Story</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #00F5FF;
+            --dark-bg: #0A1128;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(rgba(10, 17, 40, 0.9), rgba(10, 17, 40, 0.9)),
+                        url('/api/placeholder/1920/300') center/cover;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
+            position: relative;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        main {
+            flex: 1;
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--dark-bg), #141E39);
+        }
+
+        .story-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="animate__animated animate__fadeInDown">StoryTeller</h1>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul class="list-inline text-center">
+                <li class="list-inline-item"><a href="categories.html" class="animate__animated animate__fadeInUp">Back to Categories</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="story-content" id="story-content">
+                <h2 id="story-title">Loading...</h2>
+                <p id="story-text">Please wait while we load the story.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 StoryTeller. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.0/marked.min.js"></script>
+    <script>
+        const storyTitle = document.getElementById('story-title');
+        const storyText = document.getElementById('story-text');
+
+        // Function to get URL parameters
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Fetch story based on the selected category
+        async function fetchStory(category) {
+            const response = await fetch(`stories/${category}.md`);
+            if (response.ok) {
+                const text = await response.text();
+                const html = marked(text); // Convert markdown to HTML
+                storyText.innerHTML = html; // Display the story
+                storyTitle.innerText = category.charAt(0).toUpperCase() + category.slice(1); // Set title
+            } else {
+                storyText.innerHTML = 'Sorry, the story could not be found.';
+                storyTitle.innerText = 'Error';
+            }
+        }
+
+        // Get the category from the URL
+        const category = getQueryParameter('category');
+        if (category) {
+            fetchStory(category);
+        } else {
+            storyText.innerHTML = 'No category specified.';
+            storyTitle.innerText = 'Error';
+        }
+    </script>
+</body>
+</html>
